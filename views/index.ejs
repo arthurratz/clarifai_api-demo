@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Clarifi Image Classification API Demo v.1.0.0</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <!-- Bootstrap core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <!-- Material Design Bootstrap -->
+  <link href="css/mdb.min.css" rel="stylesheet">
+  <!-- Your custom styles (optional) -->
+  <link href="css/style.css" rel="stylesheet">
+  <!-- AngularJS core -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+</head>
+
+<script type="text/javascript">
+    var app = angular.module('clarifaiApp', []);
+    app.controller('clarifaiCtrl', function($scope) {
+      $scope.onNavTabClick = function(class_name) {
+        $.post("/images", { 'class_name': class_name }, function(data, status) {
+          $scope.$apply(function () {
+            $scope.model = JSON.parse(data);
+          });
+        });
+      }
+      $scope.onTrainModel = function() {
+        $.post("/train", function(data, status) {
+          alert('Your Model Has Been Successfully Trained...');
+        });
+      }
+      $scope.onPredict = function() {
+        $.post("/predict", { 'url': $('#url').val() }, function(data, status) {
+          alert(data);
+        });
+      }
+    });
+</script>
+
+<body ng-app="clarifaiApp" data-ng-controller="clarifaiCtrl" ng-init="onNavTabClick('Trucks')">
+  <div class="container">
+    <div class="row" style="margin-top: 20px !important">
+      <div class="col">
+        <div class="card" style="height: 700px !important">
+          <!-- Card content -->
+          <div class="card-body">
+            <div class="row">
+              <div class="col">
+                <!--Navbar-->
+                <nav class="navbar navbar-expand-lg navbar-dark primary-color">
+
+                <!-- Navbar brand -->
+                <a class="navbar-brand" href="#"><b>ClarifaiAPI@Demo v1.0.0</b></a>
+  
+                <!-- Collapse button -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+                    aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+                </button>
+  
+                <!-- Collapsible content -->
+                <div class="collapse navbar-collapse" id="basicExampleNav">
+                    <!-- Links -->
+                    <ul class="navbar-nav mr-auto">
+                      <li class="nav-item active">
+                        <a class="nav-link" href="#" ng-click="onNavTabClick('Trucks')">Trucks
+                          <span class="sr-only">(current)</span>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="#" ng-click="onNavTabClick('Luxury Cars')">Luxury Cars</a>
+                      </li>
+                    </ul>
+                    <button class="btn btn-outline-white btn-md my-2 my-sm-0 ml-3" type="submit" ng-click="onTrainModel()">Train Model</button>
+                  </div>
+                  <!-- Collapsible content -->
+                  </nav>
+                  <!--/.Navbar-->          
+                </div>
+             </div>
+             <div class="row">
+               <div class="col">
+                 <div class="d-flex justify-content-center">
+                  <div class="input-group flex-nowrap"  style="width: 800px; margin-top: 10px"> 
+                      <div class="input-group-prepend">
+                        <span class="input-group-text" id="addon-wrapping">
+                          <i class="fas fa-globe-americas"></i>
+                        </span>
+                      </div>
+                      <input type="text" id="url" class="form-control" placeholder="Your Own Vehicle Image URL (e.g. https://example.com/vehicle.jpg)" 
+                          aria-label="Your Own Vehicle Image URL (e.g. https://example.com/vehicle.jpg)" aria-describedby="addon-wrapping">
+                      <div class="input-group-append">
+                         <button class="btn btn-md btn-secondary m-0 px-3 py-2 z-depth-0 waves-effect" type="button" id="button-addon2" ng-click="onPredict()">Classify Image...</button>
+                      </div>
+                    </div>
+               </div>
+               <hr/>
+               <div id="images" style="overflow:scroll; height:400px;">
+                <img ng-repeat="image in model" style="float: left; height: 15em; margin-right: 1%; margin-bottom: 0.5em;" 
+                      src="{{image.image_url}}" width=40% height=40%>test</img>
+               </div>
+             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- SCRIPTS -->
+  <!-- JQuery -->
+  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+  <!-- Bootstrap tooltips -->
+  <script type="text/javascript" src="js/popper.min.js"></script>
+  <!-- Bootstrap core JavaScript -->
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+  <!-- MDB core JavaScript -->
+  <script type="text/javascript" src="js/mdb.min.js"></script>
+</body>
+
+</html>

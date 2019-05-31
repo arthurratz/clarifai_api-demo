@@ -1,0 +1,5 @@
+{ "host": "<MY_SQL_HOST_IP_ADDRESS>", 
+  "port": 3306, 
+  "user": "<USER_NAME>", 
+  "password": "<PASSWORD>", 
+  "database": "clrfai_imagebase" }
